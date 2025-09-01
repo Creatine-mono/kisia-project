@@ -1,23 +1,9 @@
-<<<<<<< HEAD
-name: Slack Push Notification
-
-on:
-  push:
-    branches: [ "main" ]
-
-jobs:
-  send-notification:
-    name: Send push notification
-    runs-on: ubuntu-latest
-    steps:
-      - name: Notify on push
-=======
 name: Slack Notifications
 
 on:
-  workflow_dispatch: {}                # ← Actions 탭에서 수동 실행
+  workflow_dispatch: {}                # Actions 탭에서 수동 실행
   push:
-    branches: ["main", "develop"]      # develop에서도 테스트
+    branches: ["main", "develop"]
   pull_request:
     types: [opened, synchronize, closed]
     branches: ["main", "develop"]
@@ -28,18 +14,16 @@ jobs:
     steps:
       - name: Notify for push
         if: github.event_name == 'push'
->>>>>>> 9b8f2203f59832b801009a174d93a997a0612b4a
         uses: slackapi/slack-github-action@v1.25.0
         with:
           payload: |
             {
               "blocks": [
-<<<<<<< HEAD
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "*${{ github.repository }}* 레포지토리에 새로운 커밋이 push 되었습니다!"
+                    "text": ":inbox_tray: *PUSH* to *${{ github.ref_name }}* in *${{ github.repository }}*"
                   }
                 },
                 {
@@ -47,11 +31,11 @@ jobs:
                   "fields": [
                     {
                       "type": "mrkdwn",
-                      "text": "*Author:*\n${{ github.actor }}"
+                      "text": "*Actor:*\n${{ github.actor }}"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Commit Message:*\n${{ github.event.head_commit.message }}"
+                      "text": "*Message:*\n${{ github.event.head_commit.message }}"
                     }
                   ]
                 },
@@ -62,35 +46,17 @@ jobs:
                       "type": "button",
                       "text": {
                         "type": "plain_text",
-                        "text": "자세히 보기",
-                        "emoji": true
+                        "text": "Commit"
                       },
                       "url": "${{ github.event.head_commit.url }}"
                     }
                   ]
                 }
-=======
-                { "type": "section",
-                  "text": { "type": "mrkdwn",
-                    "text": ":inbox_tray: *PUSH* to *${{ github.ref_name }}* in *${{ github.repository }}*" } },
-                { "type": "section",
-                  "fields": [
-                    { "type": "mrkdwn", "text": "*Actor:*\n${{ github.actor }}" },
-                    { "type": "mrkdwn", "text": "*Message:*\n${{ github.event.head_commit.message }}" }
-                  ]},
-                { "type": "actions", "elements": [
-                  { "type": "button", "text": { "type": "plain_text", "text": "Commit" },
-                    "url": "${{ github.event.head_commit.url }}" }
-                ]}
->>>>>>> 9b8f2203f59832b801009a174d93a997a0612b4a
               ]
             }
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-<<<<<<< HEAD
           SLACK_CHANNEL_ID: C09CZPMC6VC
-=======
-          SLACK_CHANNEL_ID: C09CZPMC6VC   # ← 채널 ID 직접 사용해도 됨
 
       - name: Notify for PR
         if: github.event_name == 'pull_request'
@@ -99,16 +65,28 @@ jobs:
           payload: |
             {
               "blocks": [
-                { "type": "section",
-                  "text": { "type": "mrkdwn",
-                    "text": ":bell: *PR* ${{ github.event.action }} → *${{ github.base_ref }}*\n*${{ github.event.pull_request.title }}*" } },
-                { "type": "actions", "elements": [
-                  { "type": "button", "text": { "type": "plain_text", "text": "Open PR" },
-                    "url": "${{ github.event.pull_request.html_url }}" }
-                ]}
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":bell: *PR* ${{ github.event.action }} → *${{ github.base_ref }}*\n*${{ github.event.pull_request.title }}*"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Open PR"
+                      },
+                      "url": "${{ github.event.pull_request.html_url }}"
+                    }
+                  ]
+                }
               ]
             }
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           SLACK_CHANNEL_ID: C09CZPMC6VC
->>>>>>> 9b8f2203f59832b801009a174d93a997a0612b4a
