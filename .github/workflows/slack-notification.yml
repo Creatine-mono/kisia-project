@@ -1,0 +1,56 @@
+name: Slack Push Notification
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  send-notification:
+    name: Send push notification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify on push
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*${{ github.repository }}* 레포지토리에 새로운 커밋이 push 되었습니다!"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Author:*\n${{ github.actor }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commit Message:*\n${{ github.event.head_commit.message }}"
+                    }
+                  ]
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "자세히 보기",
+                        "emoji": true
+                      },
+                      "url": "${{ github.event.head_commit.url }}"
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: C09CZPMC6VC
