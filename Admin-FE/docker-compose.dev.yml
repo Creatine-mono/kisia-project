@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: admin-fe-frontend-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=${BACKEND_API_URL:-http://host.docker.internal:8000}
+      - NODE_ENV=development
+      - WATCHPACK_POLLING=true  # 파일 변경 감지 활성화
+    volumes:
+      # 소스 코드 마운트 (Hot Reload 활성화)
+      - ./frontend:/app
+      # node_modules는 컨테이너 내부 것 사용 (호스트와 충돌 방지)
+      - /app/node_modules
+      - /app/.next
+    restart: unless-stopped
+    networks:
+      - admin-network
+    command: npm run dev
+
+networks:
+  admin-network:
+    driver: bridge

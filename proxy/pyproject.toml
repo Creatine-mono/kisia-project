@@ -1,0 +1,10 @@
+[project]
+name = "proxy"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.13"
+dependencies = [
+    "mitmproxy>=10.0.0",
+    "requests>=2.28.0",
+    "Pillow>=9.0.0",  # PIL for basic image handling
+]

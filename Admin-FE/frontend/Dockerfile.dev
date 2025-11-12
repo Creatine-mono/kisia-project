@@ -1,0 +1,22 @@
+# 개발용 Dockerfile
+FROM node:18-alpine
+
+# 개발에 필요한 패키지 설치
+RUN apk add --no-cache libc6-compat
+
+WORKDIR /app
+
+# package.json과 lock 파일 복사
+COPY package.json package-lock.json* ./
+
+# 의존성 설치
+RUN npm ci --legacy-peer-deps
+
+# 초기 소스 코드 복사 (볼륨 마운트로 덮어씌워질 예정)
+COPY . .
+
+# 포트 노출
+EXPOSE 3000
+
+# 개발 서버 실행
+CMD ["npm", "run", "dev"]
