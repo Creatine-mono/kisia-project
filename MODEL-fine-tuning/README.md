@@ -701,7 +701,7 @@ python finetune_parliament_detector.py
    └─> 합성 개인정보 생성 (이름, 주소, 전화번호 등)
 
 2. gendata_placeholder_mistral.py
-   └─> ChatGPT API로 자연스러운 문장 생성
+   └─> Bllossom/llama-3.2-Korean-Bllossom-AICA-5B로 자연스러운 문장 생성
 
 3. preprocessing.py
    └─> Kiwi 형태소 분석 + BIO 태깅
